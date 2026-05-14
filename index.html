@@ -1,0 +1,842 @@
+S<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PulseFlow - Produtividade Automática</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lucide@latest"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background-color: #0F172A;
+            color: #CBD5E1;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        .gradient-purple {
+            background: linear-gradient(to right, #7C3AED, #6D28D9);
+        }
+
+        .gradient-purple-hover:hover {
+            background: linear-gradient(to right, #6D28D9, #5B21B6);
+        }
+
+        .glow-purple {
+            box-shadow: 0 0 20px rgba(124, 58, 237, 0.5);
+        }
+
+        .glow-purple-lg {
+            box-shadow: 0 0 40px rgba(124, 58, 237, 0.3);
+        }
+
+        .smooth-transition {
+            transition: all 0.3s ease;
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.6s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .grid-pattern {
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+        }
+
+        .backdrop-blur {
+            backdrop-filter: blur(10px);
+        }
+
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Mobile menu */
+        .mobile-menu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .mobile-menu.active {
+            max-height: 500px;
+        }
+
+        /* Hover effects */
+        .card-hover:hover {
+            transform: translateY(-5px);
+            border-color: rgba(124, 58, 237, 0.3);
+            background-color: rgba(30, 41, 59, 0.5);
+        }
+
+        /* Buttons */
+        .btn-primary {
+            background: linear-gradient(to right, #7C3AED, #6D28D9);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 25px rgba(124, 58, 237, 0.3);
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(to right, #6D28D9, #5B21B6);
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(124, 58, 237, 0.5);
+        }
+
+        .btn-secondary {
+            border: 2px solid #1E293B;
+            background-color: rgba(30, 41, 59, 0.5);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-secondary:hover {
+            background-color: #1E293B;
+            border-color: rgba(124, 58, 237, 0.5);
+        }
+    </style>
+</head>
+<body class="bg-[#0F172A]">
+    <!-- Header -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-[#0F172A]/80 backdrop-blur-md border-b border-[#1E293B]">
+        <div class="container mx-auto px-4 md:px-6">
+            <div class="flex items-center justify-between h-16 md:h-20">
+                <!-- Logo -->
+                <div class="flex items-center gap-2">
+                    <div class="w-10 h-10 rounded-lg gradient-purple flex items-center justify-center glow-purple">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                        </svg>
+                    </div>
+                    <span class="text-xl font-extrabold text-white">PulseFlow</span>
+                </div>
+
+                <!-- Desktop Nav -->
+                <nav class="hidden md:flex items-center gap-8">
+                    <a href="#beneficios" class="text-[#CBD5E1] hover:text-[#7C3AED] smooth-transition font-medium">Benefícios</a>
+                    <a href="#funcionalidades" class="text-[#CBD5E1] hover:text-[#7C3AED] smooth-transition font-medium">Funcionalidades</a>
+                    <a href="#precos" class="text-[#CBD5E1] hover:text-[#7C3AED] smooth-transition font-medium">Preços</a>
+                    <a href="#faq" class="text-[#CBD5E1] hover:text-[#7C3AED] smooth-transition font-medium">FAQ</a>
+                </nav>
+
+                <!-- Desktop Buttons -->
+                <div class="hidden md:flex items-center gap-4">
+                    <button class="text-white hover:text-[#A78BFA] smooth-transition font-semibold">Entrar</button>
+                    <button class="btn-primary">Começar grátis</button>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <button class="md:hidden text-white" id="mobile-menu-btn">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Mobile Menu -->
+            <div class="mobile-menu md:hidden py-4 border-t border-[#1E293B]" id="mobile-menu">
+                <nav class="flex flex-col gap-4">
+                    <a href="#beneficios" class="text-white hover:text-[#7C3AED] smooth-transition font-medium">Benefícios</a>
+                    <a href="#funcionalidades" class="text-white hover:text-[#7C3AED] smooth-transition font-medium">Funcionalidades</a>
+                    <a href="#precos" class="text-white hover:text-[#7C3AED] smooth-transition font-medium">Preços</a>
+                    <a href="#faq" class="text-white hover:text-[#7C3AED] smooth-transition font-medium">FAQ</a>
+                    <button class="text-left text-white hover:text-[#A78BFA] smooth-transition font-semibold">Entrar</button>
+                    <button class="btn-primary w-full">Começar grátis</button>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="relative overflow-hidden bg-[#0F172A] py-20 md:py-32 pt-36 md:pt-40">
+        <div class="absolute inset-0 bg-gradient-to-b from-[#7C3AED]/10 via-transparent to-transparent"></div>
+        <div class="absolute inset-0 grid-pattern opacity-40"></div>
+
+        <div class="container mx-auto px-4 md:px-6 relative z-10">
+            <div class="grid gap-12 lg:grid-cols-2 lg:gap-8 items-center">
+                <div class="flex flex-col gap-6 animate-fade-in">
+                    <!-- Badge -->
+                    <div class="inline-flex items-center gap-2 rounded-full bg-[#7C3AED]/20 border border-[#7C3AED]/30 px-4 py-2 w-fit backdrop-blur">
+                        <span class="text-sm text-[#A78BFA] font-medium">✨ Grátis por 7 dias</span>
+                    </div>
+
+                    <!-- Title -->
+                    <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-tight">
+                        Sua produtividade no automático.
+                    </h1>
+
+                    <!-- Subtitle -->
+                    <p class="text-lg md:text-xl text-[#CBD5E1] max-w-xl font-medium">
+                        Organize tarefas, estudos e metas em um único lugar com ajuda de IA.
+                    </p>
+
+                    <!-- Buttons -->
+                    <div class="flex flex-col sm:flex-row gap-4 mt-4">
+                        <button class="btn-primary">
+                            Começar grátis
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </button>
+                        <button class="btn-secondary">
+                            <svg class="w-5 h-5" fill="white" viewBox="0 0 24 24">
+                                <path d="M8 5v14l11-7z"></path>
+                            </svg>
+                            Ver demonstração
+                        </button>
+                    </div>
+
+                    <!-- User Count -->
+                    <div class="flex items-center gap-6 mt-6">
+                        <div class="flex -space-x-2">
+                            <div class="w-10 h-10 rounded-full gradient-purple border-2 border-[#0F172A]"></div>
+                            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-[#6D28D9] to-[#5B21B6] border-2 border-[#0F172A]"></div>
+                            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-[#5B21B6] to-[#3B82F6] border-2 border-[#0F172A]"></div>
+                        </div>
+                        <div class="text-sm">
+                            <p class="font-bold text-white">+12.000 usuários</p>
+                            <p class="text-[#CBD5E1]">organizando suas rotinas</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hero Image -->
+                <div class="hidden lg:flex items-center justify-center">
+                    <div class="relative w-full max-w-md h-96 rounded-2xl gradient-purple p-1 glow-purple-lg">
+                        <div class="w-full h-full rounded-xl bg-[#0F172A] flex items-center justify-center">
+                            <div class="text-center">
+                                <svg class="w-24 h-24 mx-auto text-[#7C3AED] mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"></path>
+                                </svg>
+                                <p class="text-[#CBD5E1]">Visualização do Dashboard</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Benefits Section -->
+    <section id="beneficios" class="py-20 md:py-32 bg-[#0F172A] relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-b from-transparent via-[#1E293B]/20 to-transparent"></div>
+
+        <div class="container mx-auto px-4 md:px-6 relative z-10">
+            <!-- Section Header -->
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
+                    Por que escolher o PulseFlow?
+                </h2>
+                <p class="text-lg md:text-xl text-[#CBD5E1] max-w-2xl mx-auto">
+                    Muito mais que uma lista de tarefas. Uma solução completa para sua produtividade.
+                </p>
+            </div>
+
+            <!-- Benefits Grid -->
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Benefit 1 -->
+                <div class="flex flex-col items-center text-center p-6 rounded-2xl bg-[#1E293B]/30 backdrop-blur border border-[#1E293B] card-hover smooth-transition group">
+                    <div class="w-16 h-16 rounded-2xl gradient-purple flex items-center justify-center mb-4 glow-purple group-hover:scale-110 smooth-transition">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-white mb-2">Foco nos resultados</h3>
+                    <p class="text-[#CBD5E1]">Pare de perder tempo planejando e comece a executar com sugestões inteligentes de IA.</p>
+                </div>
+
+                <!-- Benefit 2 -->
+                <div class="flex flex-col items-center text-center p-6 rounded-2xl bg-[#1E293B]/30 backdrop-blur border border-[#1E293B] card-hover smooth-transition group">
+                    <div class="w-16 h-16 rounded-2xl gradient-purple flex items-center justify-center mb-4 glow-purple group-hover:scale-110 smooth-transition">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10h8m0 0l-8-8m8 8l-8 8m0-8H5"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-white mb-2">Tudo em um lugar</h3>
+                    <p class="text-[#CBD5E1]">Tarefas, calendário, Pomodoro e relatórios unidos em uma única plataforma.</p>
+                </div>
+
+                <!-- Benefit 3 -->
+                <div class="flex flex-col items-center text-center p-6 rounded-2xl bg-[#1E293B]/30 backdrop-blur border border-[#1E293B] card-hover smooth-transition group">
+                    <div class="w-16 h-16 rounded-2xl gradient-purple flex items-center justify-center mb-4 glow-purple group-hover:scale-110 smooth-transition">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-white mb-2">Melhore continuamente</h3>
+                    <p class="text-[#CBD5E1]">Acompanhe seu progresso e identifique padrões para otimizar sua rotina.</p>
+                </div>
+
+                <!-- Benefit 4 -->
+                <div class="flex flex-col items-center text-center p-6 rounded-2xl bg-[#1E293B]/30 backdrop-blur border border-[#1E293B] card-hover smooth-transition group">
+                    <div class="w-16 h-16 rounded-2xl gradient-purple flex items-center justify-center mb-4 glow-purple group-hover:scale-110 smooth-transition">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-white mb-2">Planejamento automático</h3>
+                    <p class="text-[#CBD5E1]">A IA reorganiza suas prioridades automaticamente quando surgem imprevistos.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="py-20 md:py-32 bg-[#0F172A] relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-b from-[#7C3AED]/5 via-transparent to-transparent"></div>
+
+        <div class="container mx-auto px-4 md:px-6 relative z-10">
+            <!-- Section Header -->
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
+                    Como funciona
+                </h2>
+                <p class="text-lg md:text-xl text-[#CBD5E1] max-w-2xl mx-auto">
+                    Três passos simples para revolucionar sua produtividade.
+                </p>
+            </div>
+
+            <!-- Steps -->
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Step 1 -->
+                <div class="relative">
+                    <div class="flex flex-col items-center">
+                        <div class="w-16 h-16 rounded-full gradient-purple flex items-center justify-center text-white text-2xl font-bold mb-4 glow-purple">1</div>
+                        <h3 class="text-xl font-semibold text-white mb-3">Crie uma conta</h3>
+                        <p class="text-[#CBD5E1] text-center">Inscreva-se gratuitamente em poucos segundos e comece sua jornada de produtividade.</p>
+                    </div>
+                    <div class="hidden md:block absolute top-20 -right-4 w-8 h-8">
+                        <svg class="w-8 h-8 text-[#7C3AED]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="relative">
+                    <div class="flex flex-col items-center">
+                        <div class="w-16 h-16 rounded-full gradient-purple flex items-center justify-center text-white text-2xl font-bold mb-4 glow-purple">2</div>
+                        <h3 class="text-xl font-semibold text-white mb-3">Configure suas metas</h3>
+                        <p class="text-[#CBD5E1] text-center">Defina seus objetivos e deixe a IA analisar seu perfil de produtividade.</p>
+                    </div>
+                    <div class="hidden md:block absolute top-20 -right-4 w-8 h-8">
+                        <svg class="w-8 h-8 text-[#7C3AED]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div>
+                    <div class="flex flex-col items-center">
+                        <div class="w-16 h-16 rounded-full gradient-purple flex items-center justify-center text-white text-2xl font-bold mb-4 glow-purple">3</div>
+                        <h3 class="text-xl font-semibold text-white mb-3">Comece a executar</h3>
+                        <p class="text-[#CBD5E1] text-center">Receba sugestões personalizadas e execute suas tarefas com máxima eficiência.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="funcionalidades" class="py-20 md:py-32 bg-[#0F172A] relative overflow-hidden">
+        <div class="container mx-auto px-4 md:px-6 relative z-10">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
+                    Funcionalidades poderosas
+                </h2>
+                <p class="text-lg md:text-xl text-[#CBD5E1] max-w-2xl mx-auto">
+                    Tudo que você precisa para uma produtividade máxima.
+                </p>
+            </div>
+
+            <!-- Features Grid -->
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Feature 1 -->
+                <div class="p-8 rounded-2xl bg-[#1E293B]/30 backdrop-blur border border-[#1E293B] card-hover smooth-transition">
+                    <div class="flex items-start gap-4 mb-4">
+                        <div class="w-12 h-12 rounded-xl gradient-purple flex items-center justify-center flex-shrink-0 glow-purple">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold text-white mb-2">Tarefas Inteligentes</h3>
+                            <p class="text-[#CBD5E1]">A IA categoriza e prioriza suas tarefas automaticamente.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Feature 2 -->
+                <div class="p-8 rounded-2xl bg-[#1E293B]/30 backdrop-blur border border-[#1E293B] card-hover smooth-transition">
+                    <div class="flex items-start gap-4 mb-4">
+                        <div class="w-12 h-12 rounded-xl gradient-purple flex items-center justify-center flex-shrink-0 glow-purple">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold text-white mb-2">Calendário Integrado</h3>
+                            <p class="text-[#CBD5E1]">Visualize todas as suas atividades em um único calendário.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="p-8 rounded-2xl bg-[#1E293B]/30 backdrop-blur border border-[#1E293B] card-hover smooth-transition">
+                    <div class="flex items-start gap-4 mb-4">
+                        <div class="w-12 h-12 rounded-xl gradient-purple flex items-center justify-center flex-shrink-0 glow-purple">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold text-white mb-2">Pomodoro Automático</h3>
+                            <p class="text-[#CBD5E1]">Técnica Pomodoro otimizada com sugestões de IA.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Feature 4 -->
+                <div class="p-8 rounded-2xl bg-[#1E293B]/30 backdrop-blur border border-[#1E293B] card-hover smooth-transition">
+                    <div class="flex items-start gap-4 mb-4">
+                        <div class="w-12 h-12 rounded-xl gradient-purple flex items-center justify-center flex-shrink-0 glow-purple">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold text-white mb-2">Relatórios Detalhados</h3>
+                            <p class="text-[#CBD5E1]">Acompanhe sua produtividade com gráficos e análises.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="py-20 md:py-32 bg-[#0F172A] relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-b from-transparent via-[#1E293B]/10 to-transparent"></div>
+
+        <div class="container mx-auto px-4 md:px-6 relative z-10">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
+                    O que nossos usuários dizem
+                </h2>
+                <p class="text-lg md:text-xl text-[#CBD5E1] max-w-2xl mx-auto">
+                    Histórias reais de transformação produtiva.
+                </p>
+            </div>
+
+            <!-- Testimonials Grid -->
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Testimonial 1 -->
+                <div class="p-8 rounded-2xl bg-[#1E293B]/30 backdrop-blur border border-[#1E293B] card-hover smooth-transition">
+                    <div class="flex items-center gap-1 mb-4">
+                        <span class="text-yellow-400">★</span>
+                        <span class="text-yellow-400">★</span>
+                        <span class="text-yellow-400">★</span>
+                        <span class="text-yellow-400">★</span>
+                        <span class="text-yellow-400">★</span>
+                    </div>
+                    <p class="text-[#CBD5E1] mb-6">"PulseFlow transformou minha organização. Consegui aumentar minha produtividade em 40% em menos de um mês!"</p>
+                    <div class="flex items-center gap-3">
+                        <div class="w-12 h-12 rounded-full gradient-purple"></div>
+                        <div>
+                            <p class="font-semibold text-white">João Silva</p>
+                            <p class="text-sm text-[#CBD5E1]">Estudante</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonial 2 -->
+                <div class="p-8 rounded-2xl bg-[#1E293B]/30 backdrop-blur border border-[#1E293B] card-hover smooth-transition">
+                    <div class="flex items-center gap-1 mb-4">
+                        <span class="text-yellow-400">★</span>
+                        <span class="text-yellow-400">★</span>
+                        <span class="text-yellow-400">★</span>
+                        <span class="text-yellow-400">★</span>
+                        <span class="text-yellow-400">★</span>
+                    </div>
+                    <p class="text-[#CBD5E1] mb-6">"A IA entende exatamente do que preciso. É como ter um assistente pessoal 24/7!"</p>
+                    <div class="flex items-center gap-3">
+                        <div class="w-12 h-12 rounded-full bg-gradient-to-br from-[#6D28D9] to-[#5B21B6]"></div>
+                        <div>
+                            <p class="font-semibold text-white">Maria Oliveira</p>
+                            <p class="text-sm text-[#CBD5E1]">Desenvolvedora</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonial 3 -->
+                <div class="p-8 rounded-2xl bg-[#1E293B]/30 backdrop-blur border border-[#1E293B] card-hover smooth-transition">
+                    <div class="flex items-center gap-1 mb-4">
+                        <span class="text-yellow-400">★</span>
+                        <span class="text-yellow-400">★</span>
+                        <span class="text-yellow-400">★</span>
+                        <span class="text-yellow-400">★</span>
+                        <span class="text-yellow-400">★</span>
+                    </div>
+                    <p class="text-[#CBD5E1] mb-6">"Finalmente consegui equilibrar trabalho, estudo e vida pessoal. Recomendo para todos!"</p>
+                    <div class="flex items-center gap-3">
+                        <div class="w-12 h-12 rounded-full bg-gradient-to-br from-[#5B21B6] to-[#3B82F6]"></div>
+                        <div>
+                            <p class="font-semibold text-white">Carlos Santos</p>
+                            <p class="text-sm text-[#CBD5E1]">Empreendedor</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="precos" class="py-20 md:py-32 bg-[#0F172A] relative overflow-hidden">
+        <div class="container mx-auto px-4 md:px-6 relative z-10">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
+                    Planos simples e justos
+                </h2>
+                <p class="text-lg md:text-xl text-[#CBD5E1] max-w-2xl mx-auto">
+                    Escolha o plano perfeito para suas necessidades.
+                </p>
+            </div>
+
+            <!-- Pricing Cards -->
+            <div class="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+                <!-- Free Plan -->
+                <div class="p-8 rounded-2xl bg-[#1E293B]/30 backdrop-blur border border-[#1E293B] card-hover smooth-transition flex flex-col">
+                    <h3 class="text-2xl font-bold text-white mb-2">Gratuito</h3>
+                    <p class="text-[#CBD5E1] mb-6">Para começar</p>
+                    <div class="mb-8">
+                        <span class="text-4xl font-bold text-white">R$ 0</span>
+                        <span class="text-[#CBD5E1]">/mês</span>
+                    </div>
+                    <ul class="space-y-4 mb-8 flex-grow">
+                        <li class="flex items-center gap-3 text-[#CBD5E1]">
+                            <span class="text-[#7C3AED]">✓</span>
+                            Até 10 tarefas
+                        </li>
+                        <li class="flex items-center gap-3 text-[#CBD5E1]">
+                            <span class="text-[#7C3AED]">✓</span>
+                            1 projeto
+                        </li>
+                        <li class="flex items-center gap-3 text-[#CBD5E1]">
+                            <span class="text-[#7C3AED]">✓</span>
+                            Suporte por email
+                        </li>
+                    </ul>
+                    <button class="btn-secondary w-full">Começar</button>
+                </div>
+
+                <!-- Pro Plan -->
+                <div class="p-8 rounded-2xl gradient-purple border-2 border-[#7C3AED] card-hover smooth-transition flex flex-col relative transform scale-105">
+                    <div class="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[#7C3AED] px-4 py-1 rounded-full">
+                        <span class="text-white text-sm font-bold">POPULAR</span>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-2 mt-4">Pro</h3>
+                    <p class="text-white/80 mb-6">Para profissionais</p>
+                    <div class="mb-8">
+                        <span class="text-4xl font-bold text-white">R$ 29</span>
+                        <span class="text-white/80">/mês</span>
+                    </div>
+                    <ul class="space-y-4 mb-8 flex-grow">
+                        <li class="flex items-center gap-3 text-white">
+                            <span>✓</span>
+                            Tarefas ilimitadas
+                        </li>
+                        <li class="flex items-center gap-3 text-white">
+                            <span>✓</span>
+                            5 projetos
+                        </li>
+                        <li class="flex items-center gap-3 text-white">
+                            <span>✓</span>
+                            IA avançada
+                        </li>
+                        <li class="flex items-center gap-3 text-white">
+                            <span>✓</span>
+                            Suporte prioritário
+                        </li>
+                    </ul>
+                    <button class="btn-primary w-full bg-white text-[#7C3AED] hover:bg-gray-100">Começar</button>
+                </div>
+
+                <!-- Enterprise Plan -->
+                <div class="p-8 rounded-2xl bg-[#1E293B]/30 backdrop-blur border border-[#1E293B] card-hover smooth-transition flex flex-col">
+                    <h3 class="text-2xl font-bold text-white mb-2">Enterprise</h3>
+                    <p class="text-[#CBD5E1] mb-6">Para equipes</p>
+                    <div class="mb-8">
+                        <span class="text-4xl font-bold text-white">Sob demanda</span>
+                    </div>
+                    <ul class="space-y-4 mb-8 flex-grow">
+                        <li class="flex items-center gap-3 text-[#CBD5E1]">
+                            <span class="text-[#7C3AED]">✓</span>
+                            Tudo do Pro
+                        </li>
+                        <li class="flex items-center gap-3 text-[#CBD5E1]">
+                            <span class="text-[#7C3AED]">✓</span>
+                            Usuários ilimitados
+                        </li>
+                        <li class="flex items-center gap-3 text-[#CBD5E1]">
+                            <span class="text-[#7C3AED]">✓</span>
+                            API dedicada
+                        </li>
+                        <li class="flex items-center gap-3 text-[#CBD5E1]">
+                            <span class="text-[#7C3AED]">✓</span>
+                            Onboarding personalizado
+                        </li>
+                    </ul>
+                    <button class="btn-secondary w-full">Falar com vendas</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="py-20 md:py-32 bg-[#0F172A] relative overflow-hidden">
+        <div class="container mx-auto px-4 md:px-6 relative z-10">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
+                    Perguntas frequentes
+                </h2>
+                <p class="text-lg md:text-xl text-[#CBD5E1] max-w-2xl mx-auto">
+                    Esclarecemos suas dúvidas sobre o PulseFlow.
+                </p>
+            </div>
+
+            <!-- FAQ Items -->
+            <div class="max-w-2xl mx-auto space-y-4">
+                <!-- FAQ Item 1 -->
+                <div class="p-6 rounded-xl bg-[#1E293B]/30 backdrop-blur border border-[#1E293B] card-hover smooth-transition cursor-pointer faq-item">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-lg font-semibold text-white">É realmente gratuito?</h3>
+                        <span class="text-[#7C3AED] faq-toggle">+</span>
+                    </div>
+                    <p class="text-[#CBD5E1] mt-4 faq-content hidden">Sim! Oferecemos um plano gratuito com 7 dias de acesso total a todas as funcionalidades. Depois disso, você pode continuar com o plano gratuito limitado ou escolher um dos nossos planos pagos.</p>
+                </div>
+
+                <!-- FAQ Item 2 -->
+                <div class="p-6 rounded-xl bg-[#1E293B]/30 backdrop-blur border border-[#1E293B] card-hover smooth-transition cursor-pointer faq-item">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-lg font-semibold text-white">Posso cancelar a qualquer hora?</h3>
+                        <span class="text-[#7C3AED] faq-toggle">+</span>
+                    </div>
+                    <p class="text-[#CBD5E1] mt-4 faq-content hidden">Claro! Não temos contratos de longo prazo. Você pode cancelar sua assinatura a qualquer momento diretamente de sua conta.</p>
+                </div>
+
+                <!-- FAQ Item 3 -->
+                <div class="p-6 rounded-xl bg-[#1E293B]/30 backdrop-blur border border-[#1E293B] card-hover smooth-transition cursor-pointer faq-item">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-lg font-semibold text-white">Meus dados estão seguros?</h3>
+                        <span class="text-[#7C3AED] faq-toggle">+</span>
+                    </div>
+                    <p class="text-[#CBD5E1] mt-4 faq-content hidden">Sim! Utilizamos encriptação de nível militar e conformidade com GDPR para garantir a segurança dos seus dados. Todos os dados são armazenados em servidores seguros.</p>
+                </div>
+
+                <!-- FAQ Item 4 -->
+                <div class="p-6 rounded-xl bg-[#1E293B]/30 backdrop-blur border border-[#1E293B] card-hover smooth-transition cursor-pointer faq-item">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-lg font-semibold text-white">Posso integrar com outras ferramentas?</h3>
+                        <span class="text-[#7C3AED] faq-toggle">+</span>
+                    </div>
+                    <p class="text-[#CBD5E1] mt-4 faq-content hidden">Sim! PulseFlow se integra com a maioria das ferramentas populares como Google Calendar, Slack, Notion e muito mais. Confira nossa página de integrações para detalhes.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-20 md:py-32 bg-[#0F172A] relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-b from-[#7C3AED]/10 via-transparent to-transparent"></div>
+
+        <div class="container mx-auto px-4 md:px-6 relative z-10">
+            <div class="max-w-2xl mx-auto text-center">
+                <h2 class="text-4xl md:text-5xl font-bold text-white mb-6">
+                    Pronto para revolucionar sua produtividade?
+                </h2>
+                <p class="text-xl text-[#CBD5E1] mb-8">
+                    Junte-se a mais de 12 mil usuários que já estão transformando suas rotinas com PulseFlow.
+                </p>
+                <button class="btn-primary text-lg">
+                    Começar meu teste grátis
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-[#0A0F1F] border-t border-[#1E293B] py-12">
+        <div class="container mx-auto px-4 md:px-6">
+            <div class="grid md:grid-cols-4 gap-8 mb-8">
+                <!-- Brand -->
+                <div>
+                    <div class="flex items-center gap-2 mb-4">
+                        <div class="w-8 h-8 rounded-lg gradient-purple flex items-center justify-center">
+                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                            </svg>
+                        </div>
+                        <span class="text-lg font-extrabold text-white">PulseFlow</span>
+                    </div>
+                    <p class="text-[#CBD5E1] text-sm">Sua produtividade no automático.</p>
+                </div>
+
+                <!-- Product -->
+                <div>
+                    <h4 class="font-semibold text-white mb-4">Produto</h4>
+                    <ul class="space-y-2 text-sm text-[#CBD5E1]">
+                        <li><a href="#" class="hover:text-[#7C3AED] smooth-transition">Funcionalidades</a></li>
+                        <li><a href="#" class="hover:text-[#7C3AED] smooth-transition">Preços</a></li>
+                        <li><a href="#" class="hover:text-[#7C3AED] smooth-transition">Integrações</a></li>
+                        <li><a href="#" class="hover:text-[#7C3AED] smooth-transition">Segurança</a></li>
+                    </ul>
+                </div>
+
+                <!-- Company -->
+                <div>
+                    <h4 class="font-semibold text-white mb-4">Empresa</h4>
+                    <ul class="space-y-2 text-sm text-[#CBD5E1]">
+                        <li><a href="#" class="hover:text-[#7C3AED] smooth-transition">Blog</a></li>
+                        <li><a href="#" class="hover:text-[#7C3AED] smooth-transition">Sobre nós</a></li>
+                        <li><a href="#" class="hover:text-[#7C3AED] smooth-transition">Carreiras</a></li>
+                        <li><a href="#" class="hover:text-[#7C3AED] smooth-transition">Contato</a></li>
+                    </ul>
+                </div>
+
+                <!-- Legal -->
+                <div>
+                    <h4 class="font-semibold text-white mb-4">Legal</h4>
+                    <ul class="space-y-2 text-sm text-[#CBD5E1]">
+                        <li><a href="#" class="hover:text-[#7C3AED] smooth-transition">Privacidade</a></li>
+                        <li><a href="#" class="hover:text-[#7C3AED] smooth-transition">Termos</a></li>
+                        <li><a href="#" class="hover:text-[#7C3AED] smooth-transition">Cookies</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Footer Bottom -->
+            <div class="border-t border-[#1E293B] pt-8">
+                <div class="flex flex-col md:flex-row items-center justify-between">
+                    <p class="text-sm text-[#CBD5E1]">© 2024 PulseFlow. Todos os direitos reservados.</p>
+                    <div class="flex items-center gap-6 mt-4 md:mt-0">
+                        <a href="#" class="text-[#CBD5E1] hover:text-[#7C3AED] smooth-transition">Twitter</a>
+                        <a href="#" class="text-[#CBD5E1] hover:text-[#7C3AED] smooth-transition">LinkedIn</a>
+                        <a href="#" class="text-[#CBD5E1] hover:text-[#7C3AED] smooth-transition">GitHub</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // Mobile Menu Toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('active');
+        });
+
+        // Close mobile menu when clicking on links
+        const mobileLinks = mobileMenu.querySelectorAll('a');
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.remove('active');
+            });
+        });
+
+        // FAQ Toggle
+        const faqItems = document.querySelectorAll('.faq-item');
+        faqItems.forEach(item => {
+            item.addEventListener('click', () => {
+                const content = item.querySelector('.faq-content');
+                const toggle = item.querySelector('.faq-toggle');
+                
+                content.classList.toggle('hidden');
+                toggle.textContent = content.classList.contains('hidden') ? '+' : '−';
+                
+                // Close other open FAQs
+                faqItems.forEach(otherItem => {
+                    if (otherItem !== item) {
+                        const otherContent = otherItem.querySelector('.faq-content');
+                        const otherToggle = otherItem.querySelector('.faq-toggle');
+                        otherContent.classList.add('hidden');
+                        otherToggle.textContent = '+';
+                    }
+                });
+            });
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const href = this.getAttribute('href');
+                if (href !== '#') {
+                    e.preventDefault();
+                    const target = document.querySelector(href);
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                }
+            });
+        });
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-fade-in');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.card-hover').forEach(card => {
+            observer.observe(card);
+        });
+    </script>
+</body>
+</html>
